@@ -1,0 +1,26 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Report {
+  id       	String     @default(cuid()) @id
+  title     	String
+  submittedDate DateTime  @default(now()) @map(name: "submitted_date")
+  expenses      Expense[]	
+}
+
+model Expense {
+  id            String       @default(cuid()) @id
+  amount        Float
+  report        Report?   @relation(fields: [reportId], references: [id])
+  reportId	String?
+  @@map(name: "expenses")
+}
